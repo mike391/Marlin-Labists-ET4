@@ -1,20 +1,9 @@
-# Marlin for ET4/5 series 3D printers
-![counter](https://enoreg85bg22wzz.m.pipedream.net)
+# Marlin for Labists ET4 3D printers
 
-This project is an effort to try to adapt the Anet ET4/ET5 motherboard and display for use with Marlin.
-Anyone can contribute to completing this project. Feedback is also welcome.
 
-# Context
 
-As I don't have a blog, I would like to leave a personal opinion here related with this project experience. To whom it may concern.
-
-I started this project as a hobby, on the one hand in response to the demand from the Anet ET series user community (including myself) for a quality and versatile firmware for their printers, and on the other hand, of Anet's refusal to provide solutions to problems and shortcomings of the stock firmware (a [change.org](https://www.change.org/p/anet-open-firmware-for-the-anet-et4) was even launched)
-
-Without much knowledge of either Marlin or the closed ET hardware, and with help from the community, we have Marlin in the ET series from some time now. It is hard to believe that a company that claims to be a leader in the 3D printing industry will not be able to employ some engineering resources to port Marlin. Or even to improve its own firmware, which most remarkable milestone on recent released V3.0.0 (jump from V1.x), is to support some new languages... 
-
-It was also a surprise (or not so much seeing it in perspective) that, in a very timely manner, Anet contacted me to get on the open source bandwagon and offer me a paid collaboration, which, although it never took place, they rushed to make it public along with an open source campaign, providing Anet a kind of reconciliation with the community appearing to be involved in this project, and a way of selling more printers. Objective accomplished.
-
-In summary, after some time dealing with Anet, my personal experience has been regrettable. The lack of seriousness shown by the company (even the CEO) is hard to believe. The only concern in this whole project has been from the marketing and sales point of view, never from their users needing, as they want to do see. Anet's style is more in line with the "let them solve it themselves, and we will take advantage of it" of a mediocre company of the heap than with the innovative company, concerned about the user experience that they want to pretend to be (or show).
+This project is a fork from  davidtgbe effort to try to adapt the Anet ET4/ET5 motherboard and display for use with Marlin.
+I've made only config changes to make it work with Labists implementation of the ET4 and as such all credit should go to davidtgbe.
 
 ## Current status
 
@@ -51,9 +40,9 @@ Currently you can only flash this firmware using a flasher (stlink, jlink, bmp e
 
 First time, I recommend making a backup of your firmware. At least your bootloader (addresses from 0x08000000 to 0x08010000). This way, you can always recover/return to stock firmware by:  
   1. flashing the bootloader backup, from address 0x08000000 to 0x8010000.  
-  2. flashing any of the available Anet firmwares from address 0x08010000 onwards.  
+  2. flashing any of the available firmwares from address 0x08010000 onwards.  
 
-If you don't perform this step, and, just in case of brick, there are copies of stock firmware ET4 releases and bootloader below on [resources](#resources) section.
+Keep in mind that my origina firmware backup didn't restore properly. The Firmware images are for the Anet ET models provided by davidtgbe
 
 ## Considerations
 
@@ -69,12 +58,10 @@ You have two options to install/update this firmware:
 
 1. Download or clone this [repo](https://github.com/davidtgbe/Marlin/archive/bugfix-2.0.x.zip). Ensure you build the firmware with **latest sources**, as firmware.srec file will not be built with older sources.
 
-2. Make sure to modify your config.h and config_adv.h according to your ET4/5 model (ET4, ET5, ET4 PRO, ET4+, ...) or you can also use [EasyConfig](https://github.com/davidtgbe/Marlin/blob/bugfix-2.0.x/Marlin/EasyConfig.h) for a simple configuration experience.
-    - Settings as driver model (A4988/TMC2208), Z endstop position (UP/DOWN), TFT resolution, XYZ size, homming offsets, auto bed levelling sensor, etc, need to be defined according to your model.
-    - Provided configuration.h and configuration_adv.h files correspond to a regular ET4/TMC2208 model with attachable bed levelling sensor.
-    - Fine tunning could be needed (e.g. XYZE [steps](https://marlinfw.org/docs/gcode/M092.html) or offsets, Jerks, JD, LA, etc).
+2. Changes are already made to config.h and config_adv.h according to Labists ET4 model
+ - Fine tunning could be needed (e.g. XYZE [steps](https://marlinfw.org/docs/gcode/M092.html) or offsets, Jerks, JD, LA, etc).
 
-3. If you are going to take **option A** from considerations section (not using a BL), **you can skip this step**. Otherwise, you need to offset the firmware to give some room to the BL. That is achieved by uncommenting a line in [<ProjectFolder>\ini\stm32f4.ini](https://github.com/davidtgbe/Marlin/blob/bugfix-2.0.x/ini/stm32f4.ini) file. It is commented by default:
+3. If you are going to take **option B** from considerations section (using a BL), **you can skip this step**. Otherwise, you need to offset the firmware back to 0x08000000. That is achieved by commenting a line in **platform.ini** file. It is uncommented by default:
 ```
 #
 # Anet ET4-MB_V1.x/ET4P-MB_V1.x (STM32F407VGT6 ARM Cortex-M4)
@@ -85,16 +72,16 @@ You have two options to install/update this firmware:
 ...
 ...
 # Uncomment next line to build for use with bootloader. Offset depends on BL used.
-#board_build.offset  = 0x10000
+board_build.offset  = 0x10000
 ...
 ...
 ```
-Change "**#board_build.offset  = 0x10000**" to
+Change "**board_build.offset  = 0x10000**" to
 ```
-board_build.offset = 0x10000
+#board_build.offset = 0x10000
 ```
-4. Build project with platform.io on VS code is recommended. There are many tutorials on the web. You can follow them, **ADAPTING** steps to build this project. This one [here](/docs/Tutorials/build-es.md) in spanish made by me, and just another one [here](https://3daddict.com/marlin-2-0-beginner-guide-for-3d-printer-firmware/).
-5. If everything went well, you will find marlin binary files with extension **.[elf|bin|srec]**, generated in the build output folder:
+4. Build project with platform.io on VS code is recommended. There are many tutorials on the web. You can follow them, **ADAPTING** steps to build this project. This one [here](/docs/Tutorials/build-es.md) in spanish made by davidtgbe, and just another one [here](https://3daddict.com/marlin-2-0-beginner-guide-for-3d-printer-firmware/).
+5. If everything went well, you will find binary files firmware.[elf|bin|srec], generated in the build output folder:
 ```
 <src_code_base_folder>\.pio\build\ET4\
 ```
@@ -105,7 +92,7 @@ There are several tutorials available for [stlink](https://www.cnx-software.com/
 
 You have two options to install/update this firmware:
 - **Option A >** If you are going to use the firmware **without** bootloader:
-  -  It is assumed you have built your firmware with no offset (step 1.3 skipped) .
+  -  It is assumed you have built your firmware with no offset (followed step 1.3) .
   -  As the firmware has been built without offset, and lacks of a bootloader, you have to just flash your firmware binary file (step 1.5) with your preferred flasher from address **0x8000000**.
 - **Option B >** If you are going to use the firmware **with** bootloader:
   - You need to flash the bootloader from address **0x08000000**. This step needs to be performed just once, so, you can skip this step if you have already done so. You can download the precompiled bootloader [binary](https://github.com/davidtgbe/openblt/releases), or, you can build it yourself from source code using [STM32 Cube IDE](https://www.st.com/en/development-tools/stm32cubeide.html).
