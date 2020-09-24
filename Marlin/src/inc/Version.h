@@ -82,7 +82,7 @@
  * providing the source code to your customers.)
  */
 #ifndef SOURCE_CODE_URL
-  #define SOURCE_CODE_URL "https://github.com/MarlinFirmware/Marlin"
+  #define SOURCE_CODE_URL "https://github.com/Atanasovgoran/Marlin-Labists-ET4"
 #endif
 
 /**
@@ -97,7 +97,7 @@
    * documentation about a specific Marlin release. Displayed in the Info Menu.
    */
 #ifndef WEBSITE_URL
-  #define WEBSITE_URL "https://github.com/davidtgbe/Marlin"
+  #define WEBSITE_URL "https://github.com/Atanasovgoran/Marlin-Labists-ET4"
 #endif
 
 /**
@@ -117,6 +117,6 @@
 #ifdef CUSTOM_MACHINE_NAME
   #define  USB_DEVICE_PRODUCT_NAME        CUSTOM_MACHINE_NAME
 #else
-  #define  USB_DEVICE_PRODUCT_NAME        MACHINE_NAME
+  #define  USB_DEVICE_PRODUCT_NAME        LABISTS_ET4
 #endif
 #define  USB_DEVICE_SERIAL_NAME           "123985739853"
